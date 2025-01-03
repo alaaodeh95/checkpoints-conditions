@@ -1,0 +1,102 @@
+.checkpoint-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Ensure exactly 5 cards per row */
+    direction: rtl;
+  }
+  
+  .checkpoint-card-2 {
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+  }
+  
+  .dark-mode .checkpoint-card-2 {
+    background-color: #1e1e1e;
+    border-color: #333;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  
+  .checkpoint-card-2:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .dark-mode .checkpoint-card-2:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
+  }
+  
+  .checkpoint-name {
+    font-size: 18px;
+    margin: 0;
+    color: #333;
+  }
+  
+  .dark-mode .checkpoint-name {
+    color: #e0e0e0;
+  }
+  
+  .checkpoint-count {
+    font-size: 14px;
+    margin: 0;
+    color: #555;
+  }
+  
+  .dark-mode .checkpoint-count {
+    color: #ccc;
+  }
+  
+  .search-container {
+    margin-bottom: 3px;
+    text-align: center;
+  }
+  
+  .search-box {
+    width: 60%;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .search-box:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .search-box::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+  
+  .dark-mode .search-box {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #444;
+  }
+  
+  .dark-mode .search-box::placeholder {
+    color: #bbb;
+  }
+  
+  .search-container svg {
+    position: absolute;
+    margin-left: -30px;
+    margin-top: 12px;
+    font-size: 20px;
+    color: #aaa;
+    transition: color 0.3s ease;
+  }
+  
+  .search-container svg:hover {
+    color: #007bff;
+  }
+  

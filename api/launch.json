@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Program",
+        "skipFiles": ["node_modules/**"],
+        "program": "AggregateApi.js", // Adjust this to the file name of your script
+        "env": {
+          "NODE_ENV": "development",
+          "MONGO_URI": "mongodb://localhost:27017"
+        },
+        "port": 9229
+      }
+    ]
+  }
+  

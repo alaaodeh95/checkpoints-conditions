@@ -1,0 +1,10 @@
+**/.idea/
+**/checkpoints/
+**/node_modules/
+**/target/
+.DS_Store
+__pycache__/
+**/.bsp
+**/CMDS.rtf
+**/auth.session
+**/build

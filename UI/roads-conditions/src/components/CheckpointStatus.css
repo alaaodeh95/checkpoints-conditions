@@ -1,0 +1,69 @@
+.CheckpointStatus {
+  padding: 20px;
+}
+
+.checkpoint-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  direction: rtl; /* Set grid to RTL */
+}
+
+.checkpoint-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+  text-align: right; /* Align card content to the right */
+}
+
+.dark-mode .checkpoint-card {
+  background-color: #1e1e1e; /* Dark mode card background */
+  border: 1px solid #333; /* Darker border */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+}
+
+.checkpoint-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode .checkpoint-card:hover {
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.checkpoint-card h3 {
+  font-size: 20px;
+  margin: 0;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.dark-mode .checkpoint-card h3 {
+  color: #e0e0e0; /* Light text for dark mode */
+}
+
+.state-section {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #555;
+  flex-direction: row-reverse; /* Reverse content flow in the state section */
+}
+
+.dark-mode .state-section {
+  color: #ccc; /* Light text for dark mode */
+}
+
+.state-section div {
+  text-align: right;
+  margin-left: 10px; /* Adjust margin for RTL */
+}
+
+.state-section strong {
+  display: block;
+  margin-bottom: 5px;
+}

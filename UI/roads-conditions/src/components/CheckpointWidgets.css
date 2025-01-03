@@ -1,0 +1,133 @@
+.CheckpointWidgets {
+    padding: 20px;
+  }
+  
+  .control-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .checkpoint-widget {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .dark-mode .checkpoint-widget {
+    background-color: #1f1f1f;
+    border: 1px solid #333;
+  }
+  
+  
+  .widget-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .pie-chart {
+    flex: 0 0 20%;
+    height: 220px; /* Slightly smaller */
+    margin: auto auto;
+  }
+  
+  .time-series-widget {
+    flex: 0 0 65%;
+    height: 300px; /* Slightly smaller */
+    margin: 0 auto;
+  }
+  
+  .aggregation-widget {
+    flex: 0 0 15%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #f9f9f9; /* Light background for aggregation area */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    direction: rtl;
+  }
+  
+  .dark-mode .aggregation-widget {
+    background-color: #2b2b2b; /* Dark mode background */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  
+  .aggregation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle divider */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border-radius: 4px; /* Rounded look for hover effect */
+  }
+  
+  .aggregation-item:last-child {
+    border-bottom: none; /* Remove divider for the last item */
+  }
+  
+  .aggregation-item:hover {
+    background-color: #f0f0f0; /* Hover effect for light mode */
+    transform: scale(1.02); /* Slight zoom on hover */
+  }
+  
+  .dark-mode .aggregation-item:hover {
+    background-color: #3a3a3a; /* Hover effect for dark mode */
+  }
+  
+  .aggregation-item span {
+    font-weight: bold; /* Emphasize percentages */
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .dark-mode .aggregation-item span {
+    color: #ccc; /* Light text for dark mode */
+  }
+  
+  .aggregation-item .label {
+    font-weight: 600; /* Semi-bold for labels */
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .dark-mode .aggregation-item .label {
+    color: #aaa; /* Softer color for dark mode */
+  }
+  
+  .aggregation-item .trend {
+    position: relative; /* Required for tooltip positioning */
+    cursor: pointer;
+  }
+  
+  .aggregation-item .trend::after {
+    content: attr(data-tooltip); /* Tooltip content from the attribute */
+    position: absolute;
+    bottom: 120%; /* Position the tooltip above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .aggregation-item .trend:hover::after {
+    opacity: 1; /* Show the tooltip on hover */
+  }
+  
