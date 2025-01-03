@@ -29,7 +29,7 @@ Install mongosh and create a database 'RoadsConditions' and 3 collections 'Struc
 Open the [RoadsConditionsPipeline](./RoadsConditionsPipeline/) project in intellji, it already has run configuration, make sure to create a checkpoint directory and replace the args in the project to your paths:
 - Make sure to edit bloom filter and checkpoint path for RawRoadDataConsumer, and only checkpoint path for StructuredMessagesAggregator
 
-Or submit them as spark jobs (change the path to yours), you can generate the jar using sbt assembly
+Or submit them as spark jobs (change the path to yours), you can generate the jar using sbt assembly or find it in the releases
 
 `spark-submit --class org.aladdin.roadsconditions.MainDispatcher \
   --master "local[3]" \
