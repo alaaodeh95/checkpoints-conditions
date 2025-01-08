@@ -33,3 +33,23 @@
     color: #e0e0e0;
   }
   
+  /* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .GeneralWidgets {
+      padding: 15px; /* Reduce padding for smaller screens */
+  }
+
+  .widget-row {
+      flex-direction: column; /* Stack widgets vertically */
+      gap: 15px; /* Adjust gap for stacked layout */
+      margin-bottom: 20px; /* Reduce bottom margin */
+  }
+
+  .widget {
+      padding: 15px; /* Adjust padding for compact layout */
+  }
+
+  .widget h2 {
+      font-size: 16px; /* Reduce font size for smaller screens */
+  }
+}

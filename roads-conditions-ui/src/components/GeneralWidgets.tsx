@@ -6,8 +6,7 @@ import DirectionPieChart from './DirectionPieChart';
 import AdminDonutChart from './AdminDonutChart';
 import './GeneralWidgets.css';
 import BarChart from './BarChart';
-
-const API_BASE_URL = 'http://localhost:3001';
+import { Data_API_Base_URL } from '../config';
 
 const GeneralWidgets: React.FC = () => {
   const [widgets, setWidgets] = useState<any>(null);
@@ -36,7 +35,7 @@ const GeneralWidgets: React.FC = () => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/widgets?from=${from}&to=${to}`);
+        const response = await fetch(`${Data_API_Base_URL}/widgets?from=${from}&to=${to}`);
         const data = await response.json();
         setWidgets(data || null);
       } catch (error) {
@@ -47,7 +46,7 @@ const GeneralWidgets: React.FC = () => {
     // Fetch data immediately and refresh every 2 seconds
     if (from && to) {
       fetchData();
-      intervalId = setInterval(fetchData, 2000);
+      intervalId = setInterval(fetchData, 5000);
     }
 
     return () => {

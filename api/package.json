@@ -1,4 +1,11 @@
 {
+  "name": "my-node-api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "AggregateApi.js",
+  "scripts": {
+    "start": "node AggregateApi.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",

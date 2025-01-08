@@ -1,0 +1,73 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  text-align: center;
+}
+
+.tabs button {
+  margin: 0 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.tabs .active {
+  background-color: #007bff;
+  color: white;
+}
+
+.filters {
+  margin: 20px;
+}
+
+.filters label {
+  margin-right: 10px;
+}
+
+.checkpoint-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.checkpoint-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px;
+  width: 200px;
+  text-align: left;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .tabs button {
+      margin: 5px 0; /* Stack buttons vertically */
+      padding: 8px 15px; /* Adjust padding for smaller screens */
+      font-size: 14px; /* Reduce font size */
+  }
+
+  .filters {
+      margin: 15px; /* Reduce margin for compact layout */
+      text-align: center; /* Center align filters on smaller screens */
+  }
+
+  .filters label {
+      margin-right: 5px; /* Adjust spacing for smaller screens */
+      font-size: 14px; /* Reduce font size for labels */
+  }
+
+  .checkpoint-list {
+      flex-direction: column; /* Stack cards vertically */
+      align-items: center; /* Center cards on smaller screens */
+  }
+
+  .checkpoint-card {
+      width: 90%; /* Make cards span most of the screen width */
+      padding: 10px; /* Adjust padding for compact layout */
+      margin: 5px 0; /* Reduce margin for tighter spacing */
+  }
+}

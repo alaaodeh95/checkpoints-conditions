@@ -131,3 +131,57 @@
     opacity: 1; /* Show the tooltip on hover */
   }
   
+  /* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .CheckpointWidgets {
+      padding: 15px;
+  }
+
+  .control-panel {
+      flex-direction: column; /* Stack controls vertically */
+      gap: 15px; /* Adjust gap for stacked layout */
+  }
+
+  .widget-row {
+      flex-direction: column; /* Stack widgets vertically */
+      gap: 15px; /* Add spacing between stacked widgets */
+  }
+
+  .pie-chart {
+      flex: 0 0 auto;
+      width: 100%; /* Make the chart responsive */
+      height: 180px; /* Reduce height for smaller screens */
+      margin: 0 auto;
+  }
+
+  .time-series-widget {
+      flex: 0 0 auto;
+      width: 100%; /* Make the chart responsive */
+      height: 220px; /* Reduce height for smaller screens */
+  }
+
+  .aggregation-widget {
+      flex: 0 0 auto;
+      width: 100%; /* Full width for smaller screens */
+      padding: 10px; /* Adjust padding */
+      gap: 10px; /* Reduce gap for tighter layout */
+  }
+
+  .aggregation-item {
+      flex-direction: column; /* Stack content vertically */
+      align-items: flex-start; /* Align items to the start */
+      padding: 8px 0; /* Adjust padding */
+  }
+
+  .aggregation-item span {
+      font-size: 14px; /* Adjust font size */
+  }
+
+  .aggregation-item .label {
+      font-size: 12px; /* Adjust font size */
+  }
+
+  .aggregation-item .trend::after {
+      bottom: 150%; /* Adjust tooltip position */
+  }
+}

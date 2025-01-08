@@ -67,3 +67,34 @@
   display: block;
   margin-bottom: 5px;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .CheckpointStatus {
+      padding: 15px;
+  }
+
+  .checkpoint-list {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 15px;
+  }
+
+  .checkpoint-card {
+      padding: 15px;
+  }
+
+  .checkpoint-card h3 {
+      font-size: 18px;
+  }
+
+  .state-section {
+      flex-direction: column; /* Stack items vertically */
+      font-size: 12px;
+      gap: 10px; /* Add spacing between items */
+  }
+
+  .state-section div {
+      margin-left: 0; /* Reset margin for stacked layout */
+  }
+}

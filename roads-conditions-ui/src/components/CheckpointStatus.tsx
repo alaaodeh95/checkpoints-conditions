@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from './Dropdown';
 import './CheckpointStatus.css';
+import { Data_API_Base_URL } from '../config';
 
 interface Checkpoint {
   checkpoint: string;
@@ -9,8 +10,6 @@ interface Checkpoint {
   enterUpdateTime: string;
   exitUpdateTime: string;
 }
-
-const API_BASE_URL = 'http://localhost:3001';
 
 const timeAgo = (dateString: string): string => {
   const now = new Date();
@@ -43,13 +42,13 @@ const CheckpointStatus: React.FC = () => {
 
     const fetchLastCheckpoints = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/last-checkpoints/${city}`, {
+        const response = await fetch(`${Data_API_Base_URL}/last-checkpoints/${city}`, {
           signal: abortController.signal,
         });
         const result = await response.json();
         setData(
           (result.checkpoints || []).sort((a: Checkpoint, b: Checkpoint) =>
-            a.checkpoint.localeCompare(b.checkpoint)
+            b.enterUpdateTime.localeCompare(a.enterUpdateTime) || b.checkpoint.localeCompare(a.checkpoint)
           )
         );
       } catch (error: any) {
@@ -60,7 +59,7 @@ const CheckpointStatus: React.FC = () => {
     };
 
     fetchLastCheckpoints();
-    const interval = window.setInterval(fetchLastCheckpoints, 2000);
+    const interval = window.setInterval(fetchLastCheckpoints, 5000);
     setRefreshInterval(interval);
 
     return () => {

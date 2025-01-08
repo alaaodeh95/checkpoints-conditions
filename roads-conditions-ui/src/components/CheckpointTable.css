@@ -100,3 +100,40 @@
     color: #007bff;
   }
   
+  /* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .checkpoint-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust for smaller screens */
+      gap: 10px; /* Add gap between cards */
+  }
+
+  .checkpoint-card-2 {
+      margin: 5px; /* Reduce margin for tighter spacing */
+      padding: 10px; /* Add padding for better readability */
+  }
+
+  .checkpoint-name {
+      font-size: 16px; /* Slightly smaller font size */
+  }
+
+  .checkpoint-count {
+      font-size: 12px; /* Adjust font size for smaller screens */
+  }
+
+  .search-container {
+      margin-bottom: 10px;
+      text-align: center;
+  }
+
+  .search-box {
+      width: 90%; /* Make search box span almost the full width */
+      font-size: 14px; /* Adjust font size for readability */
+      padding: 10px 15px; /* Reduce padding for compact look */
+  }
+
+  .search-container svg {
+      margin-left: -25px;
+      font-size: 18px; /* Adjust icon size */
+      margin-top: 10px;
+  }
+}

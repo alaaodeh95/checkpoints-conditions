@@ -124,19 +124,18 @@ async def fetch_and_publish_messages(lookbackPeriodInDays=7):
                 if group_name in processed_hours:
                     limit[group_name] = max(processed_hours[group_name], 10)
 
-            await asyncio.sleep(1)
-
         for hour, messages in hourly_buckets.items():
             for kafka_message in messages:
                 push_to_kafka(producer, kafka_topic, key=str(hour), message=str(kafka_message))
             logging.info(f"Pushed remaining messages for hour {hour} to Kafka.")
+            await asyncio.sleep(1)
 
 
 if __name__ == "__main__":
     try:
         logging.info("Starting Telegram to Kafka service...")
         asyncio.run(fetch_admins())
-        asyncio.run(fetch_and_publish_messages(14))
+        asyncio.run(fetch_and_publish_messages(28))
     except KeyboardInterrupt:
         logging.info("Service terminated by user.")
     except Exception as e:

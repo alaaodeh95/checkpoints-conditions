@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './CheckpointPredictor.css';
+import { Prediction_API_Base_URl } from "../config";
 
 const Predictor: React.FC = () => {
   const [hour, setHour] = useState<number>(0);
@@ -67,12 +68,12 @@ const Predictor: React.FC = () => {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/predict", {
+      const response = await fetch(`${Prediction_API_Base_URl}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify(requestBody)
       });
 
       const data = await response.json();

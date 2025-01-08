@@ -1,16 +1,17 @@
-const express = require('express');
-const { MongoClient } = require('mongodb');
-const cors = require('cors');
+import express from 'express';
+import { MongoClient } from 'mongodb';
+import cors from 'cors';
 
 const app = express();
-const PORT = 3001;
-const MONGO_URI = "mongodb://localhost:27017";
+const MONGO_URI = "mongodb+srv://alaaodeh:Cersi1995%3F@roads-db.ddnkb.mongodb.net/?retryWrites=true&w=majority&appName=roads-db";
 const DB_NAME = "RoadsConditions";
 const CHECKPOINT_COLLECTION_NAME = "CheckpointAggregation";
 const STRUCTURED_DATA_COLLECTION = "StructuredData";
 app.use(cors());
 
-const client = new MongoClient(MONGO_URI);
+const client = new MongoClient(MONGO_URI || "mongodb://localhost:27017");
+await client.connect();
+const db = client.db(DB_NAME);
 
 const calculateTrend = (current, previous) => {
   if (previous === 0) return current === 0 ? 0 : 100; // no previous data means full increase
@@ -18,7 +19,6 @@ const calculateTrend = (current, previous) => {
 };
 
 const fetchTimeSeries = async (city, from, to) => {
-  const db = client.db(DB_NAME);
   const collection = db.collection(CHECKPOINT_COLLECTION_NAME);
 
   return await collection.aggregate([
@@ -43,7 +43,6 @@ const fetchTimeSeries = async (city, from, to) => {
 };
 
 const fetchAggregations = async (city, from, to) => {
-  const db = client.db(DB_NAME);
   const collection = db.collection(CHECKPOINT_COLLECTION_NAME);
 
   return await collection.aggregate([
@@ -71,10 +70,9 @@ const fetchAggregations = async (city, from, to) => {
 };
 
 const fetchLastCheckpointData = async (city) => {
-  const db = client.db(DB_NAME);
   const collection = db.collection(STRUCTURED_DATA_COLLECTION);
 
-  const sixHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000); // 12 hours back
+  const sixHoursAgo = new Date(Date.now() - 120 * 60 * 60 * 1000); // 12 hours back
 
   const data = await collection.aggregate([
     {
@@ -156,8 +154,6 @@ app.get('/checkpoints/:city', async (req, res) => {
   }
 
   try {
-    await client.connect();
-
     const timeSeriesData = await fetchTimeSeries(city, from, to);
     const currentAggregations = await fetchAggregations(city, from, to);
 
@@ -209,7 +205,7 @@ app.get('/checkpoints/:city', async (req, res) => {
     console.error(error);
     res.status(500).send("Internal Server Error");
   } finally {
-    await client.close();
+    //await client.close();
   }
 });
 
@@ -218,8 +214,6 @@ app.get('/last-checkpoints/:city', async (req, res) => {
   const { city } = req.params;
 
   try {
-    await client.connect();
-
     const data = await fetchLastCheckpointData(city);
 
     res.json({ city, checkpoints: data });
@@ -227,7 +221,7 @@ app.get('/last-checkpoints/:city', async (req, res) => {
     console.error(error);
     res.status(500).send("Internal Server Error");
   } finally {
-    await client.close();
+    //await client.close();
   }
 });
 
@@ -326,9 +320,6 @@ app.get('/widgets', async (req, res) => {
   }
 
   try {
-    await client.connect();
-    const db = client.db(DB_NAME);
-
     const [hourlyData, overallAggregations] = await Promise.all([
       fetchReportHourlyData(db, from, to),
       fetchGeneralAggregations(db, from, to),
@@ -347,13 +338,13 @@ app.get('/widgets', async (req, res) => {
     console.error("Error fetching widgets data:", error);
     res.status(500).send("Internal Server Error");
   } finally {
-    await client.close();
+    //await client.close();
   }
 });
 
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(process.env.PORT || 3001, () => {
+  console.log(`Server running on port ${process.env.PORT || 3001}`);
 });
 
 

@@ -126,3 +126,43 @@
     margin-bottom: 8px;
   }
   
+  /* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .Predictor {
+      max-width: 90%;
+      padding: 15px;
+      margin: 30px auto;
+  }
+
+  .Predictor h2 {
+      font-size: 1.5em;
+  }
+
+  .Predictor form {
+      gap: 10px;
+  }
+
+  .Predictor label {
+      font-size: 0.9rem;
+  }
+
+  .Predictor input,
+  .Predictor select {
+      font-size: 0.9rem;
+      padding: 10px;
+  }
+
+  .Predictor button {
+      padding: 10px;
+      font-size: 0.9rem;
+  }
+
+  .output {
+      padding: 15px;
+      font-size: 0.9rem;
+  }
+
+  .output h3 {
+      font-size: 1.2em;
+  }
+}

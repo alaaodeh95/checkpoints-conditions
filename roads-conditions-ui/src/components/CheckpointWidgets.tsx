@@ -4,8 +4,7 @@ import TimeSeriesWidget from './TimeSeriesWidget';
 import AggregationWidget from './AggregationWidgets';
 import PieChartWidget from './PieChartWidget';
 import './CheckpointWidgets.css';
-
-const API_BASE_URL = 'http://localhost:3001';
+import { Data_API_Base_URL } from '../config';
 
 const CheckpointWidgets: React.FC = () => {
   const [city, setCity] = useState<string>('نابلس');
@@ -48,7 +47,7 @@ const CheckpointWidgets: React.FC = () => {
 
     const fetchCheckpoints = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/checkpoints/${city}?from=${from}&to=${to}`);
+        const response = await fetch(`${Data_API_Base_URL}/checkpoints/${city}?from=${from}&to=${to}`);
         const data = await response.json();
 
         // Sort by timeSeries length in descending order
@@ -65,7 +64,7 @@ const CheckpointWidgets: React.FC = () => {
     // Fetch data immediately and every 2 seconds
     if (from && to) {
       fetchCheckpoints();
-      intervalId = setInterval(fetchCheckpoints, 2000);
+      intervalId = setInterval(fetchCheckpoints, 5000);
     }
 
     return () => {
