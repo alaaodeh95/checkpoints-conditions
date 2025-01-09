@@ -17,8 +17,8 @@ object StructuredMessagesAggregator {
       .select("data.*")
 
     // Write streams
-    writeAggStreamToMongo(aggregators.countAggregations(inputDF, getWindowDuration(60)), "AggregationCount", "update", 60)
-    writeAggStreamToMongo(aggregators.aggCheckpoints(inputDF, getWindowDuration(60)), "CheckpointAggregation", "update", 60)
+    writeStreamToMongo(aggregators.countAggregations(inputDF, getWindowDuration(60)), "AggregationCount", "update", 60)
+    writeStreamToMongo(aggregators.aggCheckpoints(inputDF, getWindowDuration(60)), "CheckpointAggregation", "update", 60)
 
     spark.streams.awaitAnyTermination()
   }

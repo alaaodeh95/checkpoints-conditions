@@ -10,7 +10,7 @@ import { Data_API_Base_URL } from '../config';
 
 const GeneralWidgets: React.FC = () => {
   const [widgets, setWidgets] = useState<any>(null);
-  const [timeRange, setTimeRange] = useState<'اخر يوم' | 'اخر ٧ ايام' | 'اخر ١٤ يوم' | 'اختر'>('اخر ٧ ايام');
+  const [timeRange, setTimeRange] = useState<'اخر يوم' | 'اخر ٧ ايام' | 'اخر ١٤ يوم' | 'اختر'>('اخر يوم');
   const [from, setFrom] = useState<string>('');
   const [to, setTo] = useState<string>('');
 
@@ -56,7 +56,7 @@ const GeneralWidgets: React.FC = () => {
 
   // Show loading message while data is being fetched
   if (!widgets) {
-    return <div>Loading...</div>;
+    return <div> ...جاري التحميل </div>;
   }
 
   return (

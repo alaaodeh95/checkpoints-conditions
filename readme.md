@@ -32,25 +32,23 @@ Open the [RoadsConditionsPipeline](./RoadsConditionsPipeline/) project in intell
 Or submit them as spark jobs (change the path to yours), you can generate the jar using sbt assembly or find it in the releases
 
 `spark-submit --class org.aladdin.roadsconditions.MainDispatcher \
-  --master "local[3]" \
+  --master "local[*]" \
   --deploy-mode client \
-  --conf spark.executor.memory=4g \
-  --conf spark.executor.cores=3 \
-  --conf spark.executor.extraClassPath=/path/to/your/guava-16.0.1.jar \
-  --conf spark.driver.extraClassPath=/path/to/your/guava-16.0.1.jar \
-  /Users/alaaodeh/Desktop/Projects/big\ data/RoadsConditions/target/scala-2.12/RoadsConditions.jar \
+  --conf spark.executor.memory=1g \
+  --conf spark.executor.cores=1 \
+  /home/alaaodeh/RoadsConditions.jar \
   RawRoadMessagesConsumer \
-  /Users/alaaodeh/Desktop/Projects/big\ data/RoadsConditions/filter.bloom \
-  /Users/alaaodeh/Desktop/Projects/big\ data/RoadsConditions/checkpoints/RawRoadDataConsumer`
+  /home/alaaodeh/filter.bloom \
+  /home/alaaodeh/checkpoints/RawRoadDataConsumer`
 
 `spark-submit --class org.aladdin.roadsconditions.MainDispatcher \
-  --master "local[3]" \
+  --master "local[*]" \
   --deploy-mode client \
-  --conf spark.executor.memory=4g \
-  --conf spark.executor.cores=3 \
-  /Users/alaaodeh/Desktop/Projects/big\ data/RoadsConditions/target/scala-2.12/RoadsConditions.jar \
+  --conf spark.executor.memory=1g \
+  --conf spark.executor.cores=1 \
+  /home/alaaodeh/RoadsConditions.jar \
   StructuredMessagesAggregator \
-  /Users/alaaodeh/Desktop/Projects/big\ data/RoadsConditions/checkpoints/StructuredMessagesAggregator`
+  /home/alaaodeh/checkpoints/StructuredMessagesAggregator`
 
 ## Run telegram producer
 - Update the fields in [Telegramkey](./Telegram%20producer/TelegramKey.py) with your app info.
@@ -69,4 +67,6 @@ Navigate to [UI](./UI/roads-conditions/) and `run npm run start`
 ## Train the model
 You can access the notebook from [here](./ai-model/Model.ipynb). 
 Make sure to have data in mongodb before trainings
+
+
 

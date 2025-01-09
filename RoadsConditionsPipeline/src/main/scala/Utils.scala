@@ -3,7 +3,7 @@ package org.aladdin.roadsconditions
 import com.mongodb.client.model.{Filters, UpdateOptions}
 import org.apache.spark.sql.functions.{col, lit}
 import org.apache.spark.sql.streaming.{StreamingQuery, Trigger}
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 import org.bson.Document
 
 object Utils {
@@ -24,13 +24,6 @@ object Utils {
     spark
   }
 
-  private def mongoWriteConfig: String => Map[String, String] = (collection: String) => Map(
-    "uri" -> f"mongodb://localhost:27017/RoadsConditions.${collection}",
-    "database" -> "RoadsConditions",
-    "collection" -> collection,
-    "replaceDocument" -> "false"
-  )
-
   def readStream: (SparkSession, String) => DataFrame = (spark: SparkSession, topicName: String) => spark.readStream
     .format("kafka")
     .option("kafka.bootstrap.servers", kafkaBootstrapServers)
@@ -38,25 +31,23 @@ object Utils {
     .option("startingOffsets", "latest")
     .load()
 
-  def appendStreamToMongo(df: DataFrame, streamName: String): StreamingQuery = {
-    df.writeStream
-      .format("mongodb")
-      .options(mongoWriteConfig(streamName))
-      .outputMode("append")
-      .trigger(Trigger.ProcessingTime("2 seconds"))
-      .start()
-  }
-
-  def writeAggStreamToMongo(df: DataFrame, streamName: String, outputMode: String, aggInMinutes: Int): StreamingQuery = {
+  def writeStreamToMongo(df: DataFrame, streamName: String, outputMode: String, aggInMinutes: Int): StreamingQuery = {
     df.writeStream
       .foreachBatch { (batchDF: DataFrame, _: Long) =>
         val mongoCollection = MongoClient.getCollection(streamName)
-        batchDF
-          .withColumn("startTime", col("window.start"))
-          .drop("window")
-          .withColumn("AggUnitInMinutes", lit(aggInMinutes))
-          .collect()
-          .foreach { row =>
+        var data: Array[Row] = Array[Row]()
+        if (aggInMinutes > 0) {
+          data = batchDF
+            .withColumn("startTime", col("window.start"))
+            .drop("window")
+            .withColumn("AggUnitInMinutes", lit(aggInMinutes))
+            .collect()
+        }
+        else {
+          data = batchDF.collect()
+        }
+
+        data.foreach { row =>
             val doc = new Document()
             row.schema.fields.foreach { field =>
               doc.append(field.name, row.getAs[Any](field.name))

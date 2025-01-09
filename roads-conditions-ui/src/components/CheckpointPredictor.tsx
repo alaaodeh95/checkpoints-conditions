@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import './CheckpointPredictor.css';
+import "./CheckpointPredictor.css";
 import { Prediction_API_Base_URl } from "../config";
 
 const Predictor: React.FC = () => {
   const [hour, setHour] = useState<number>(0);
   const [day, setDay] = useState<string>("0");
-  const [checkpoint, setCheckpoint] = useState<string>("checkpoint_17 عصيرة");
+  const [checkpoint, setCheckpoint] = useState<string>("checkpoint_المربعة");
   const [result, setResult] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false); // New loading state
 
   const arabicWeekDays = [
     "الاثنين",
@@ -19,12 +20,12 @@ const Predictor: React.FC = () => {
   ];
 
   const checkpoints = [
+    "checkpoint_المربعة",
     "checkpoint_17 عصيرة",
     "checkpoint_DCO",
     "checkpoint_الباذان",
     "checkpoint_الحمرا",
     "checkpoint_الغرس بزاريا",
-    "checkpoint_المربعة",
     "checkpoint_بزاريا",
     "checkpoint_بوابة النبي صالح",
     "checkpoint_بوابة بورين",
@@ -58,8 +59,17 @@ const Predictor: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Show loading spinner
 
-    const dayInEnglish = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][parseInt(day)];
+    const dayInEnglish = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ][parseInt(day)];
 
     const requestBody = {
       checkpoint,
@@ -73,13 +83,15 @@ const Predictor: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       });
 
       const data = await response.json();
       setResult(data);
     } catch (error) {
       console.error("Error fetching prediction:", error);
+    } finally {
+      setLoading(false); // Hide loading spinner
     }
   };
 
@@ -90,7 +102,7 @@ const Predictor: React.FC = () => {
         <label>
           الساعة
           <input
-            style={{maxWidth: "95%"}}
+            style={{ maxWidth: "95%" }}
             type="number"
             value={hour}
             min="0"
@@ -113,7 +125,11 @@ const Predictor: React.FC = () => {
 
         <label>
           الحاجز
-          <select value={checkpoint} onChange={(e) => setCheckpoint(e.target.value)} required>
+          <select
+            value={checkpoint}
+            onChange={(e) => setCheckpoint(e.target.value)}
+            required
+          >
             {checkpoints.map((cp, index) => (
               <option key={index} value={cp}>
                 {cp.replace("checkpoint_", "")}
@@ -122,14 +138,17 @@ const Predictor: React.FC = () => {
           </select>
         </label>
 
-        <button type="submit">تنبؤ</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "جاري التنبؤ..." : "تنبؤ"}
+        </button>
       </form>
 
       {result && (
         <div className="output">
           <h3>النتيجة</h3>
           <p>
-            <strong>الحالة المتوقعة:</strong> {result.predicted_status === "Open" ? "مفتوح" : "أزمة"}
+            <strong>الحالة المتوقعة:</strong>{" "}
+            {result.predicted_status === "Open" ? "مفتوح" : "أزمة"}
           </p>
           <p>
             <strong>الاحتمالات:</strong>

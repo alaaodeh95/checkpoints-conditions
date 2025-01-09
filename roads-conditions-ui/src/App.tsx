@@ -12,11 +12,18 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend)
 
 function App() {
   const [activeTab, setActiveTab] = useState<'CheckpointStatus' | 'CheckpointWidgets' | 'GeneralWidgets' | 'Predict'>('CheckpointStatus');
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    const isDark = localStorage.getItem('darkMode')=== 'true';
+    document.body.className = isDark ? 'dark-mode' : '';
+    return isDark; 
+  });
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.body.className = darkMode ? '' : 'dark-mode';
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('darkMode', newMode.toString());
+    document.body.className = newMode ? 'dark-mode' : '';
   };
 
   return (

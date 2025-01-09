@@ -44,3 +44,10 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# Deploy
+from build dir
+
+`zip -r my-react-app.zip .`
+
+`az webapp deployment source config-zip --resource-group RoadsConditions --name roads-conditions --src my-react-app.zip`

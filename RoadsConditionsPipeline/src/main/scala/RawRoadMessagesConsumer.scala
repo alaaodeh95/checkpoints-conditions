@@ -43,7 +43,7 @@ object RawRoadMessagesConsumer {
       .drop("messageId", "sentence","isReply","shouldProcess", "pos", "sentences", "text")
 
     // Write to mongo
-    appendStreamToMongo(transformedDF, "StructuredData")
+    writeStreamToMongo(transformedDF, "StructuredData", "append", 0)
 
     // Push to kafka
      transformedDF

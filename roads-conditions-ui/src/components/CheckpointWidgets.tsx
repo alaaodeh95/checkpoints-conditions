@@ -9,7 +9,7 @@ import { Data_API_Base_URL } from '../config';
 const CheckpointWidgets: React.FC = () => {
   const [city, setCity] = useState<string>('نابلس');
   const [checkpoints, setCheckpoints] = useState<any[]>([]);
-  const [timeRange, setTimeRange] = useState<'اخر يوم' | 'اخر ٧ ايام' | 'اخر ١٤ يوم' | 'اختر'>('اخر ٧ ايام');
+  const [timeRange, setTimeRange] = useState<'اخر يوم' | 'اخر ٧ ايام' | 'اخر ١٤ يوم' | 'اختر'>('اخر يوم');
   const [from, setFrom] = useState<string>('');
   const [to, setTo] = useState<string>('');
 
@@ -71,6 +71,10 @@ const CheckpointWidgets: React.FC = () => {
       if (intervalId) clearInterval(intervalId); // Cleanup interval on unmount
     };
   }, [city, from, to]);
+
+  if (!checkpoints.length) {
+    return <div> ...جاري التحميل </div>;
+  }
 
   return (
     <div className="CheckpointWidgets">

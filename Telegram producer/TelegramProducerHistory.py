@@ -135,7 +135,7 @@ if __name__ == "__main__":
     try:
         logging.info("Starting Telegram to Kafka service...")
         asyncio.run(fetch_admins())
-        asyncio.run(fetch_and_publish_messages(28))
+        asyncio.run(fetch_and_publish_messages(4))
     except KeyboardInterrupt:
         logging.info("Service terminated by user.")
     except Exception as e:

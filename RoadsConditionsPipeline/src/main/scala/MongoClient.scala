@@ -4,7 +4,8 @@ import com.mongodb.client.{MongoClient, MongoClients, MongoCollection, MongoData
 import org.bson.Document
 
 object MongoClient {
-  val client: MongoClient = MongoClients.create("mongodb://localhost:27017")
+  val ConnectionString = "mongodb+srv://alaaodeh:Cersi1995%3F@roads-db.ddnkb.mongodb.net/?retryWrites=true&w=majority&appName=roads-db";
+  val client: MongoClient = MongoClients.create(ConnectionString)
   val database: MongoDatabase = client.getDatabase("RoadsConditions")
 
   def getCollection(collectionName: String): MongoCollection[Document] = {

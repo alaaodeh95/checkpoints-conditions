@@ -35,40 +35,34 @@ const CheckpointStatus: React.FC = () => {
 
   const [city, setCity] = useState<string>(cities[0]);
   const [data, setData] = useState<Checkpoint[]>([]);
-  const [refreshInterval, setRefreshInterval] = useState<number | null>(null);
 
   useEffect(() => {
-    let abortController = new AbortController();
-
+    let intervalId: NodeJS.Timeout;
     const fetchLastCheckpoints = async () => {
       try {
-        const response = await fetch(`${Data_API_Base_URL}/last-checkpoints/${city}`, {
-          signal: abortController.signal,
-        });
+        const response = await fetch(`${Data_API_Base_URL}/last-checkpoints/${city}`);
         const result = await response.json();
-        setData(
-          (result.checkpoints || []).sort((a: Checkpoint, b: Checkpoint) =>
-            b.enterUpdateTime.localeCompare(a.enterUpdateTime) || b.checkpoint.localeCompare(a.checkpoint)
-          )
-        );
+        setData(result.checkpoints.sort((a: Checkpoint, b: Checkpoint) =>
+          b.enterUpdateTime.localeCompare(a.enterUpdateTime) || b.exitUpdateTime.localeCompare(a.exitUpdateTime)
+        ));
       } catch (error: any) {
-        if (error.name !== 'AbortError') {
-          console.error('Error fetching checkpoint data:', error);
-        }
+        console.error('Error fetching checkpoint data:', error);
       }
     };
 
-    fetchLastCheckpoints();
-    const interval = window.setInterval(fetchLastCheckpoints, 5000);
-    setRefreshInterval(interval);
+    if (city) {
+      fetchLastCheckpoints();
+      intervalId = setInterval(fetchLastCheckpoints, 5000);
+    }
 
     return () => {
-      abortController.abort();
-      if (refreshInterval) {
-        clearInterval(refreshInterval);
-      }
+      if (intervalId) clearInterval(intervalId); // Cleanup interval on unmount
     };
   }, [city]);
+
+  if (!data.length) {
+    return <div> ...جاري التحميل </div>;
+  }
 
   return (
     <div className="CheckpointStatus">
