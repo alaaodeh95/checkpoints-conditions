@@ -58,7 +58,7 @@ const LiveMessages: React.FC = () => {
       try {
         var from = firstRun ?
           new Date(new Date().getTime() -  30 * 60 * 1000).toISOString() :
-          new Date(new Date().getTime() -  15 * 1000).toISOString();
+          new Date(new Date().getTime() -  120 * 1000).toISOString();
 
         var to = new Date(new Date().getTime()).toISOString();
 
