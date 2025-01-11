@@ -12,6 +12,7 @@ const CheckpointWidgets: React.FC = () => {
   const [timeRange, setTimeRange] = useState<'اخر يوم' | 'اخر ٧ ايام' | 'اخر ١٤ يوم' | 'اختر'>('اخر يوم');
   const [from, setFrom] = useState<string>('');
   const [to, setTo] = useState<string>('');
+  const [loading, setLoading] = useState(true);
 
   const cities = [
     'نابلس',
@@ -45,8 +46,9 @@ const CheckpointWidgets: React.FC = () => {
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
-    const fetchCheckpoints = async () => {
+    const fetchCheckpoints = async (fromInterval: boolean) => {
       try {
+        !fromInterval && setLoading(true);
         const response = await fetch(`${Data_API_Base_URL}/checkpoints/${city}?from=${from}&to=${to}`);
         const data = await response.json();
 
@@ -56,6 +58,7 @@ const CheckpointWidgets: React.FC = () => {
         );
 
         setCheckpoints(sortedCheckpoints || []);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching checkpoint data:', error);
       }
@@ -63,8 +66,8 @@ const CheckpointWidgets: React.FC = () => {
 
     // Fetch data immediately and every 2 seconds
     if (from && to) {
-      fetchCheckpoints();
-      intervalId = setInterval(fetchCheckpoints, 5000);
+      fetchCheckpoints(false);
+      intervalId = setInterval(() => fetchCheckpoints(true), 60000);
     }
 
     return () => {
@@ -72,10 +75,22 @@ const CheckpointWidgets: React.FC = () => {
     };
   }, [city, from, to]);
 
-  if (!checkpoints.length) {
-    return <div> ...جاري التحميل </div>;
-  }
-
+  var content = loading ? <div> ...جاري التحميل </div> : checkpoints.length ?
+    checkpoints.map((checkpoint) => (
+      <div key={checkpoint.name} className="checkpoint-widget">
+        <h2>{checkpoint.name}</h2>
+        <div className="widget-row">
+          <AggregationWidget aggregations={checkpoint.aggregations} />
+          <TimeSeriesWidget timeSeries={checkpoint.timeSeries} />
+          <PieChartWidget
+            a={checkpoint.aggregations.adminCount}
+            b={checkpoint.aggregations.nonAdminCount}
+            labela='مدير مجموعة'
+            labelb='عضو عادي'
+          />
+        </div>
+      </div>
+    )) : <div>لا توجد بيانات</div>;
   return (
     <div className="CheckpointWidgets">
       <div className="control-panel">
@@ -111,21 +126,7 @@ const CheckpointWidgets: React.FC = () => {
       </div>
 
       {/* Checkpoint Widgets */}
-      {checkpoints.map((checkpoint) => (
-        <div key={checkpoint.name} className="checkpoint-widget">
-          <h2>{checkpoint.name}</h2>
-          <div className="widget-row">
-            <AggregationWidget aggregations={checkpoint.aggregations} />
-            <TimeSeriesWidget timeSeries={checkpoint.timeSeries} />
-            <PieChartWidget
-              a={checkpoint.aggregations.adminCount}
-              b={checkpoint.aggregations.nonAdminCount}
-              labela='مدير مجموعة'
-              labelb='عضو عادي'
-            />
-          </div>
-        </div>
-      ))}
+      {content}
     </div>
   );
 };

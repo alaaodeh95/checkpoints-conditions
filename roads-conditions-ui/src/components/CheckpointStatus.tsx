@@ -35,24 +35,27 @@ const CheckpointStatus: React.FC = () => {
 
   const [city, setCity] = useState<string>(cities[0]);
   const [data, setData] = useState<Checkpoint[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
-    const fetchLastCheckpoints = async () => {
+    const fetchLastCheckpoints = async (fromInterval: boolean) => {
       try {
+        !fromInterval && setLoading(true);
         const response = await fetch(`${Data_API_Base_URL}/last-checkpoints/${city}`);
         const result = await response.json();
         setData(result.checkpoints.sort((a: Checkpoint, b: Checkpoint) =>
           b.enterUpdateTime.localeCompare(a.enterUpdateTime) || b.exitUpdateTime.localeCompare(a.exitUpdateTime)
         ));
+        setLoading(false);
       } catch (error: any) {
         console.error('Error fetching checkpoint data:', error);
       }
     };
 
     if (city) {
-      fetchLastCheckpoints();
-      intervalId = setInterval(fetchLastCheckpoints, 5000);
+      fetchLastCheckpoints(false);
+      intervalId = setInterval(() => fetchLastCheckpoints(true), 5000);
     }
 
     return () => {
@@ -60,9 +63,26 @@ const CheckpointStatus: React.FC = () => {
     };
   }, [city]);
 
-  if (!data.length) {
-    return <div> ...جاري التحميل </div>;
-  }
+  var content = loading ? <div> ...جاري التحميل </div> : data.length ? 
+    <div className="checkpoint-list">
+      {data.map((checkpoint) => (
+        <div key={checkpoint.checkpoint} className="checkpoint-card">
+          <h3>{checkpoint.checkpoint}</h3>
+          <div className="state-section">
+            <div>
+               الداخل : {checkpoint.enterState || "-"}
+              <br />
+              <small>اخر تحديث: {(checkpoint.enterState && timeAgo(checkpoint.enterUpdateTime))|| "-"}</small>
+            </div>
+            <div>
+              الخارج : {checkpoint.exitState || "-"}
+              <br />
+              <small>اخر تحديث: {(checkpoint.exitState && timeAgo(checkpoint.exitUpdateTime)) || "-"}</small>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div> : <div>لا توجد بيانات</div>;
 
   return (
     <div className="CheckpointStatus">
@@ -71,25 +91,7 @@ const CheckpointStatus: React.FC = () => {
         value={city}
         onChange={(value: string) => setCity(value)}
       />
-      <div className="checkpoint-list">
-        {data.map((checkpoint) => (
-          <div key={checkpoint.checkpoint} className="checkpoint-card">
-            <h3>{checkpoint.checkpoint}</h3>
-            <div className="state-section">
-              <div>
-                 الداخل : {checkpoint.enterState || "-"}
-                <br />
-                <small>اخر تحديث: {(checkpoint.enterState && timeAgo(checkpoint.enterUpdateTime))|| "-"}</small>
-              </div>
-              <div>
-                الخارج : {checkpoint.exitState || "-"}
-                <br />
-                <small>اخر تحديث: {(checkpoint.exitState && timeAgo(checkpoint.exitUpdateTime)) || "-"}</small>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      {content}
     </div>
   );
 };

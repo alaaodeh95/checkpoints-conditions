@@ -1,6 +1,7 @@
 import express from 'express';
 import { MongoClient } from 'mongodb';
 import cors from 'cors';
+import { getCheckpoint } from './MessagesFilter.js';
 
 const app = express();
 const MONGO_URI = "mongodb+srv://alaaodeh:Cersi1995%3F@roads-db.ddnkb.mongodb.net/?retryWrites=true&w=majority&appName=roads-db";
@@ -225,6 +226,30 @@ app.get('/last-checkpoints/:city', async (req, res) => {
   }
 });
 
+app.get('/last-messages/:city', async (req, res) => {
+  const { city } = req.params;
+  const { from, to } = req.query;
+
+  try {
+    const data = (await fetchMessagesData(from, to)).map(x => {
+      var checkpoint = getCheckpoint(x.text, city);
+      if (checkpoint)
+      {
+        x.checkpoint = checkpoint;
+        return x
+      }
+      return null
+    }).filter(x => x != null)
+
+    res.json({ data });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    //await client.close();
+  }
+});
+
 const fetchReportHourlyData = async (db, from, to) => {
   const collection = db.collection("AggregationCount");
   return await collection
@@ -239,6 +264,27 @@ const fetchReportHourlyData = async (db, from, to) => {
       },
     ])
     .toArray();
+};
+
+const fetchMessagesData = async (from, to) => {
+  const collection = db.collection("Messages");
+  return await collection
+  .aggregate([
+    {
+      $match: {
+        $expr: {
+          $and: [
+            { $gte: [{ $dateFromString: { dateString: "$sentTime" } }, new Date(from)] },
+            { $lt: [{ $dateFromString: { dateString: "$sentTime" } }, new Date(to)] }
+          ]
+        }
+      }
+    },
+    {
+      $sort: { sentTime: -1 } // Sorting by the original field as stored
+    }
+  ])
+  .toArray();
 };
 
 

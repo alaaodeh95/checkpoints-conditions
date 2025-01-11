@@ -253,5 +253,5 @@ object Models {
     "خارج" -> List("طالع","خارج"),
     "الاتجاهين" -> List("الاتجاهين"))
 
-  val groups: List[String] = List("ahwalaltreq", "ahwalaltareq", "a7walstreet", "ahwalaltareq")
+  val groups: List[String] = List("ahwalaltreq", "ahwalaltareq", "a7walstreet", "road_jehad")
 }

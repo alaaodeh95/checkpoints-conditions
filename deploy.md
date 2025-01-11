@@ -56,6 +56,18 @@ ssh alaaodeh@52.168.181.252
 
 `sudo systemctl status kafka-producer.service`
 
+# Telegram producer timer service
+`sudo nano /etc/systemd/system/kafka-producer.timer`
+
+`sudo systemctl daemon-reload`
+
+`sudo systemctl enable kafka-producer.timer`
+
+`sudo systemctl start kafka-producer.timer`
+
+`sudo systemctl status kafka-producer.timer`
+
+
 # Spark Job 1 service definition
 [Unit]
 Description=Spark Job 1
@@ -125,3 +137,17 @@ RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+
+# Telegram producer timer
+[Unit]
+Description=Restart kafka-producer every 2 hours
+
+[Timer]
+OnCalendar=*-*-* *:00/120
+Unit=kafka-producer.service
+
+[Install]
+WantedBy=timers.target
+
+# Copy JAR
+scp /Users/alaaodeh/Desktop/Projects/big\ data/RoadsCondition/RoadsConditionsPipeline/target/scala-2.12/RoadsConditions.jar alaaodeh@52.168.181.252:/home/alaaodeh

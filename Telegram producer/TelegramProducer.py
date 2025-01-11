@@ -2,8 +2,9 @@ import asyncio
 from telethon import TelegramClient
 from kafka import KafkaProducer
 import logging
-from datetime import datetime, timezone
+from datetime import timezone
 import telethon
+from pymongo import MongoClient
 
 api_id = '23333158'
 api_hash = '597dbd2f898a10253436be68434e1ea9'
@@ -19,7 +20,7 @@ logging.basicConfig(
 kafka_server = 'localhost:9092'
 kafka_topic = 'road-raw-messages'
 
-group_names = ['ahwalaltreq', 'ahwalaltareq', 'a7walstreet', 'ahwalaltareq']
+group_names = ['ahwalaltreq', 'ahwalaltareq', 'a7walstreet', 'road_jehad']
 group_admins = {}
 last_processed_message = {group_name: 0 for group_name in group_names}
 
@@ -28,6 +29,8 @@ producer = KafkaProducer(
     value_serializer=lambda v: v.encode('utf-8'),
     key_serializer=lambda k: k.encode('utf-8')
 )
+client = MongoClient("mongodb+srv://alaaodeh:Cersi1995%3F@roads-db.ddnkb.mongodb.net/?retryWrites=true&w=majority&appName=roads-db")
+collecion = client["RoadsConditions"]["Messages"]
 
 async def fetch_admins(client, group_name):
     try:
@@ -59,7 +62,7 @@ async def fetch_and_publish_messages():
                 try:
                     first_message = 0
                     msg_idx = 0
-                    async for message in client.iter_messages(group_name, limit=10):
+                    async for message in client.iter_messages(group_name, limit=20):
                         if msg_idx == 0:
                             first_message = message
                             msg_idx = msg_idx + 1
@@ -89,11 +92,12 @@ async def fetch_and_publish_messages():
                                 "messageId": message.id
                             }
                             push_to_kafka(producer, kafka_topic, key=group_name, message=str(kafka_message))
+                            collecion.insert_one(kafka_message)
                     last_processed_message[group_name] = first_message.id
                 except Exception as e:
                     logging.error(f"Failed to fetch messages from {group_name}: {e}")
 
-            await asyncio.sleep(5)
+            await asyncio.sleep(30)
 
 if __name__ == "__main__":
     try:
@@ -101,5 +105,8 @@ if __name__ == "__main__":
         asyncio.run(fetch_and_publish_messages())
     except KeyboardInterrupt:
         logging.info("Service terminated by user.")
+        client.close()
+
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
+        client.close()

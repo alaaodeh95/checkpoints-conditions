@@ -3,6 +3,7 @@ import CheckpointStatus from './components/CheckpointStatus';
 import CheckpointWidgets from './components/CheckpointWidgets';
 import GeneralWidgets from './components/GeneralWidgets';
 import CheckpointPredictor from './components/CheckpointPredictor';
+import LiveMessages from './components/LiveMessages';
 
 import './App.css';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
@@ -11,7 +12,7 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Toolti
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'CheckpointStatus' | 'CheckpointWidgets' | 'GeneralWidgets' | 'Predict'>('CheckpointStatus');
+  const [activeTab, setActiveTab] = useState<'LiveMessages' | 'CheckpointStatus' | 'CheckpointWidgets' | 'GeneralWidgets' | 'Predict'>('LiveMessages');
   
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     const isDark = localStorage.getItem('darkMode')=== 'true';
@@ -35,6 +36,12 @@ function App() {
         </button>
       </header>
       <div className="tabs">
+      <button
+          className={activeTab === 'LiveMessages' ? 'active' : ''}
+          onClick={() => setActiveTab('LiveMessages')}
+        >
+          اخر البلاغات
+        </button>
         <button
           className={activeTab === 'CheckpointStatus' ? 'active' : ''}
           onClick={() => setActiveTab('CheckpointStatus')}
@@ -61,6 +68,7 @@ function App() {
         </button>
       </div>
       <main>
+        {activeTab === 'LiveMessages' && <LiveMessages />}
         {activeTab === 'CheckpointStatus' && <CheckpointStatus />}
         {activeTab === 'CheckpointWidgets' && <CheckpointWidgets />}
         {activeTab === 'GeneralWidgets' && <GeneralWidgets />}

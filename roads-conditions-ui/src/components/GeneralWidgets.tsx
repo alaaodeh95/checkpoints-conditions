@@ -13,6 +13,7 @@ const GeneralWidgets: React.FC = () => {
   const [timeRange, setTimeRange] = useState<'اخر يوم' | 'اخر ٧ ايام' | 'اخر ١٤ يوم' | 'اختر'>('اخر يوم');
   const [from, setFrom] = useState<string>('');
   const [to, setTo] = useState<string>('');
+  const [loading, setLoading] = useState(true);
 
   // Update from and to based on selected time range
   useEffect(() => {
@@ -33,11 +34,13 @@ const GeneralWidgets: React.FC = () => {
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
-    const fetchData = async () => {
+    const fetchData = async (fromInterval: boolean) => {
       try {
+        !fromInterval && setLoading(true);
         const response = await fetch(`${Data_API_Base_URL}/widgets?from=${from}&to=${to}`);
         const data = await response.json();
         setWidgets(data || null);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching widget data:', error);
       }
@@ -45,8 +48,8 @@ const GeneralWidgets: React.FC = () => {
 
     // Fetch data immediately and refresh every 2 seconds
     if (from && to) {
-      fetchData();
-      intervalId = setInterval(fetchData, 5000);
+      fetchData(false);
+      intervalId = setInterval(() => fetchData(true), 5000);
     }
 
     return () => {
@@ -54,10 +57,42 @@ const GeneralWidgets: React.FC = () => {
     };
   }, [from, to]);
 
-  // Show loading message while data is being fetched
-  if (!widgets) {
-    return <div> ...جاري التحميل </div>;
-  }
+  var content = loading ? <div> ...جاري التحميل </div> : 
+    <>
+    <div className="widget-row">
+      <div className="widget">
+        <h2>بيانات الحواجز</h2>
+        <CheckpointTable checkpointCounts={widgets.checkpointCounts} />
+      </div>
+      <div className="widget">
+        <h2>تفاصيل اوقات البلاغات</h2>
+        <HourlyDataChart hourlyData={widgets.hourlyData} />
+      </div>
+    </div>
+    <div className="widget-row">
+      <div className="widget" style={{ flex: '0 0 46%' }}>
+        <h2>البلاغات لحواجز المدن</h2>
+        <BarChart counts={widgets.cityCounts} label={"المدن"} />
+      </div>
+      <div className="widget" style={{ flex: '0 0 auto' }}>
+        <h2>بلاغات مدراء المجموعات والاعضاء</h2>
+        <AdminDonutChart
+          admin={widgets.adminCounts.admin}
+          nonAdmin={widgets.adminCounts.nonAdmin}
+        />
+      </div>
+      <div className="widget" style={{ flex: '0 0 auto' }}>
+        <h2>البلاغات باتجاه الحاجز</h2>
+        <DirectionPieChart directionCounts={widgets.directionCounts} />
+      </div>
+    </div>
+    <div className="widget-row">
+      <div className="widget" style={{ flex: '0 0 50%' }}>
+        <h2>البلاغات القادمة من كل مجموعة</h2>
+        <BarChart counts={widgets.groupCounts} label={"المجموعات"} orientation='horizontal'/>
+      </div>
+    </div>
+  </>;
 
   return (
     <div className="GeneralWidgets">
@@ -88,39 +123,7 @@ const GeneralWidgets: React.FC = () => {
           </div>
         )}
       </div>
-      <div className="widget-row">
-        <div className="widget">
-          <h2>بيانات الحواجز</h2>
-          <CheckpointTable checkpointCounts={widgets.checkpointCounts} />
-        </div>
-        <div className="widget">
-          <h2>تفاصيل اوقات البلاغات</h2>
-          <HourlyDataChart hourlyData={widgets.hourlyData} />
-        </div>
-      </div>
-      <div className="widget-row">
-        <div className="widget" style={{ flex: '0 0 46%' }}>
-          <h2>البلاغات لحواجز المدن</h2>
-          <BarChart counts={widgets.cityCounts} label={"المدن"} />
-        </div>
-        <div className="widget" style={{ flex: '0 0 auto' }}>
-          <h2>بلاغات مدراء المجموعات والاعضاء</h2>
-          <AdminDonutChart
-            admin={widgets.adminCounts.admin}
-            nonAdmin={widgets.adminCounts.nonAdmin}
-          />
-        </div>
-        <div className="widget" style={{ flex: '0 0 auto' }}>
-          <h2>البلاغات باتجاه الحاجز</h2>
-          <DirectionPieChart directionCounts={widgets.directionCounts} />
-        </div>
-      </div>
-      <div className="widget-row">
-        <div className="widget" style={{ flex: '0 0 50%' }}>
-          <h2>البلاغات القادمة من كل مجموعة</h2>
-          <BarChart counts={widgets.groupCounts} label={"المجموعات"} orientation='horizontal'/>
-        </div>
-      </div>
+      {content}
     </div>
   );
 };

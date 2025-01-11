@@ -15,8 +15,8 @@ object Utils {
       .builder()
       .appName(appName)
       .master("local[3]")
-      .config("spark.executor.memory", "4g")
-      .config("spark.sql.shuffle.partitions", "4")
+      //.config("spark.executor.memory", "4g")
+      //.config("spark.sql.shuffle.partitions", "4")
       .config("fs.defaultFS", "file:///")
       .config("spark.sql.streaming.checkpointLocation", s"file://$checkpointDir")
       .getOrCreate()
@@ -63,7 +63,7 @@ object Utils {
           }
       }
       .outputMode(outputMode)
-      .trigger(Trigger.ProcessingTime("2 seconds"))
+      .trigger(Trigger.ProcessingTime("5 minutes"))
       .start()
   }
 
