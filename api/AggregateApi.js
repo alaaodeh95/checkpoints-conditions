@@ -232,7 +232,7 @@ app.get('/last-messages/:city', async (req, res) => {
 
   try {
     const data = (await fetchMessagesData(from, to)).map(x => {
-      var checkpoint = getCheckpoint(x.text, city);
+      var checkpoint = getCheckpoint(x.text, Boolean(x.isReply), city);
       if (checkpoint)
       {
         x.checkpoint = checkpoint;

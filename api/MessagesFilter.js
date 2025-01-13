@@ -218,8 +218,8 @@ var checkpointAliases = {
 }
 
 
-function getCheckpoint(inputString, city) {
-    if (!cityCheckpointMapping[city]) {
+function getCheckpoint(inputString, isReply, city) {
+    if (!cityCheckpointMapping[city] || (!isReply && isQuestion(inputString))) {
         return null;
     }
 
@@ -238,6 +238,10 @@ function getCheckpoint(inputString, city) {
 
     // TODO: If no checkpoint matches, return null
     return null;
+}
+
+function isQuestion(inputString) {
+  return ["كيف","شو", "?", "؟","اجي عليها","هل","وضع"].some(substring => inputString.includes(substring));
 }
 
 // TODO: Export the function for use in other files

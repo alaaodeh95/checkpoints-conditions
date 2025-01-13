@@ -96,7 +96,7 @@ header h1 {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   header {
-      flex-direction: column; /* Stack header content vertically */
+      font-size: 14px;
       text-align: center; /* Center align header text */
       gap: 10px; /* Add spacing between elements */
       padding: 15px; /* Reduce padding for smaller screens */
@@ -105,6 +105,7 @@ header h1 {
   .tabs {
       flex-direction: column; /* Stack tabs vertically */
       gap: 10px; /* Add spacing between tabs */
+      margin: 0;
   }
 
   .tabs button {
@@ -119,3 +120,46 @@ header h1 {
   }
 }
 
+/* Mobile Dropdown Styling */
+/* Mobile Dropdown Styling */
+.mobile-dropdown {
+  appearance: none; /* Removes default dropdown styling */
+  background: none; /* Remove default background */
+  border: none; /* Remove border */
+  font-size: 16px;
+  color: #007bff; /* Match your app's theme color */
+  text-align: center;
+  margin: 10px 0;
+  padding: 10px 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.mobile-dropdown:focus {
+  outline: none; /* Remove focus outline */
+}
+
+.mobile-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  background-color: transparent; /* Ensure no background box */
+}
+
+.mobile-dropdown-wrapper::after {
+  content: "▼"; /* Custom dropdown arrow */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 16px;
+  color: #007bff; /* Match your theme */
+}
+
+.dark-mode .mobile-dropdown {
+  color: #e0e0e0; /* Light text for dark mode */
+}
+
+.dark-mode .mobile-dropdown-wrapper::after {
+  color: #e0e0e0; /* Light arrow for dark mode */
+}

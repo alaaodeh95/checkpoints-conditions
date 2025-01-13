@@ -19,10 +19,10 @@ const timeAgo = (dateString: string): string => {
   const diffInSeconds = Math.floor((now.getTime() - updatedTime.getTime()) / 1000);
 
   if (diffInSeconds < 60) {
-    return `${diffInSeconds} ثواني`;
+    return `${diffInSeconds} ثانية`;
   } else if (diffInSeconds < 3600) {
     const minutes = Math.floor(diffInSeconds / 60);
-    return `${minutes} دقيقة`;
+    return `${minutes} دقائق`;
   } else {
     const hours = Math.floor(diffInSeconds / 3600);
     return `${hours} ساعة`;
@@ -90,10 +90,10 @@ const LiveMessages: React.FC = () => {
       {data.map((message, index) => (
         <div key={`${message.checkpoint}-${index}`} className="message-card">
           <div className="message-header">
-            <span className={`badge ${message.isAdmin ? 'admin-badge' : 'user-badge'}`}>
-              {message.isAdmin ? 'Admin' : 'User'}
-            </span>
             <span className="sent-time">{timeAgo(message.sentTime)}</span>
+            <span className={`badge ${message.isAdmin ? 'admin-badge' : 'user-badge'}`}>
+              {message.isAdmin ? `ادمن في ${message.group}` : `عضو في ${message.group}` }
+            </span>
           </div>
           <div className="message-content">
             <p>{message.text}</p>
