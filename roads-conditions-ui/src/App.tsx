@@ -46,10 +46,10 @@ function App() {
               onChange={(e) => setActiveTab(e.target.value as typeof activeTab)}
             >
               <option value="LiveMessages">اخر البلاغات</option>
-              <option value="CheckpointStatus">احوال الحواجز الآن</option>
-              <option value="CheckpointWidgets">تحليل بيانات الحواجز</option>
-              <option value="GeneralWidgets">تحليل عام للبيانات</option>
-              <option value="Predict">تنبأ حالة الحاجز</option>
+              <option value="CheckpointStatus" disabled={true}>احوال الحواجز الآن</option>
+              <option value="CheckpointWidgets" disabled={true}>تحليل بيانات الحواجز</option>
+              <option value="GeneralWidgets" disabled={true}>تحليل عام للبيانات</option>
+              <option value="Predict" disabled={true}>تنبأ حالة الحاجز</option>
             </select>
           </div>
 
@@ -62,24 +62,28 @@ function App() {
               اخر البلاغات
             </button>
             <button
+              disabled={true}
               className={activeTab === 'CheckpointStatus' ? 'active' : ''}
               onClick={() => setActiveTab('CheckpointStatus')}
             >
               احوال الحواجز الآن
             </button>
             <button
+              disabled={true}
               className={activeTab === 'CheckpointWidgets' ? 'active' : ''}
               onClick={() => setActiveTab('CheckpointWidgets')}
             >
               تحليل بيانات الحواجز
             </button>
             <button
+              disabled={true}
               className={activeTab === 'GeneralWidgets' ? 'active' : ''}
               onClick={() => setActiveTab('GeneralWidgets')}
             >
               تحليل عام للبيانات
             </button>
             <button
+              disabled={true}
               className={activeTab === 'Predict' ? 'active' : ''}
               onClick={() => setActiveTab('Predict')}
             >

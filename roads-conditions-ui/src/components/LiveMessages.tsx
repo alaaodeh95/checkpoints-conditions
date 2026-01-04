@@ -50,6 +50,8 @@ const LiveMessages: React.FC = () => {
   const [city, setCity] = useState<string>(cities[0]);
   const [data, setData] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null);
+  const [, setTick] = useState(0); // Force re-render for timeAgo updates
 
 
   useEffect(() => {
@@ -67,6 +69,7 @@ const LiveMessages: React.FC = () => {
         const result = (await response.json()).data || [];
         
         setData((prevData) => uniqueByMessageId([...result, ...prevData]));
+        setLastUpdateTime(new Date());
         firstRun && setLoading(false);
       } catch (error: any) {
         console.error('Error fetching messages data:', error);
@@ -77,13 +80,22 @@ const LiveMessages: React.FC = () => {
       fetchLastMessages(true);
       intervalId = setInterval(() => {
         fetchLastMessages()
-      }, 5000);
+      }, 60000); // Fetch every 1 minute
     }
 
     return () => {
       if (intervalId) clearInterval(intervalId); // Cleanup interval on unmount
     };
   }, [city]);
+
+  // Update timeAgo display every second
+  useEffect(() => {
+    const tickInterval = setInterval(() => {
+      setTick(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(tickInterval);
+  }, []);
 
   var content = loading ? <div> ...جاري التحميل </div> : data.length ? 
     <div className="checkpoint-list">
@@ -110,8 +122,22 @@ const LiveMessages: React.FC = () => {
         onChange={(value: string) => {
           setData([]);
           setCity(value);
+          setLastUpdateTime(null);
         }}
       />
+      {lastUpdateTime && (
+        <div className="last-update-indicator" style={{
+          padding: '10px',
+          margin: '10px 0',
+          backgroundColor: '#f0f0f0',
+          borderRadius: '5px',
+          textAlign: 'center',
+          fontWeight: 'bold',
+          color: '#333'
+        }}>
+          اخر تحديث للبيانات منذ {timeAgo(lastUpdateTime.toISOString())}
+        </div>
+      )}
       {content}
     </div>
   );
