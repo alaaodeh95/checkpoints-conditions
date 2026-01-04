@@ -1,3 +1,18 @@
 {
-    "appService.showBuildDuringDeployPrompt": false
+    "appService.showBuildDuringDeployPrompt": false,
+    "azureFunctions.deploySubpath": "Telegram producer/FunctionApp",
+    "azureFunctions.scmDoBuildDuringDeployment": true,
+    "azureFunctions.pythonVenv": ".venv",
+    "azureFunctions.projectLanguage": "Python",
+    "azureFunctions.projectRuntime": "~4",
+    "debug.internalConsoleOptions": "neverOpen",
+    "azureFunctions.projectSubpath": "Telegram producer/FunctionApp",
+      "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".git{,/**}",
+    ".vscode{,/**}",
+    ".github{,/**}",
+    "coverage{,/**}",
+    "**/*.map"
+  ]
 }
